@@ -1,19 +1,21 @@
 PREFIX ?= /usr/local
 CC ?= gcc
+CFLAGS ?= -pedantic -Wall -O2
+DESTDIR ?= meem-search
 
 fuzzycmp: fuzzycmp-src/fuzzycmp.c
-	$(CC) -pedantic -Wall -O2 fuzzycmp-src/fuzzycmp.c -o fuzzycmp
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
 	rm fuzzycmp
 
 install: fuzzycmp
-	mkdir $(PREFIX)/bin/meem-search
-	cp fuzzycmp $(PREFIX)/bin/meem-search
-	cp meem $(PREFIX)/bin/meem-search
-	ln -s $(PREFIX)/bin/meem-search/meem $(PREFIX)/bin/meem
+	mkdir $(PREFIX)/bin/$(DESTDIR)
+	cp fuzzycmp $(PREFIX)/bin/$(DESTDIR)
+	cp meem $(PREFIX)/bin/$(DESTDIR)
+	ln -s $(PREFIX)/bin/$(DESTDIR)/meem $(PREFIX)/bin/meem
 
 uninstall:
-	rm -r $(PREFIX)/bin/meem-search $(PREFIX)/bin/meem
+	rm -r $(PREFIX)/bin/$(DESTDIR) $(PREFIX)/bin/meem
 
-.PHONY: clean uninstall
+.PHONY: clean install uninstall
