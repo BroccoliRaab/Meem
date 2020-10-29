@@ -21,7 +21,7 @@ case $1 in
             echo "Not a meem repo."
             exit 1
         fi
-        ./fuzzycmp "$2" < .meem |paste -d" " - .meem |cut -f1 -d"/"|sort |sed 's/[^ ]* //'| sxiv -i -a
+        fuzzycmp "$2" < .meem |paste -d" " - .meem |cut -f1 -d"/"|sort |sed 's/[^ ]* //'| sxiv -i -a
         ;;
     clean)
         rm -i .meem
