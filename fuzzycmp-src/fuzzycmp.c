@@ -100,17 +100,17 @@ void strlower(char * str){
 }
 
 void get_string(char ** buff_ptr, size_t * cap){
-    char c;
+    int character = 1;
     int chars_read = 0;
     char* buff = *buff_ptr;
-    while (c != EOF) {
-        c = getchar();
+    while (character != EOF) {
+        character = getchar();
         chars_read++;
         if (*cap<=(chars_read-1)){
             *cap = sizeof(char)*(chars_read+1);
             buff = realloc(buff, *cap);
         }
-        buff[chars_read-1] = c;
+        buff[chars_read-1] = (char) character;
     }
     buff[chars_read] = '\0';
     *buff_ptr = buff;
