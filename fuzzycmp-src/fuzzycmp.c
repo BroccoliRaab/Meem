@@ -14,13 +14,13 @@
 //With 2 strings of different length string a should always be the shortest one
 typedef struct line {
     char text[MAX_LINE_SIZE];
-    LINE* next;
+    struct line * next;
 } LINE;
 
 int dl_strcmp(const char *,  const char *);
 int hamming_strcmp(const char *, const char *, unsigned int);
 int fuzzy_strcmp(const char *, const char *);
-void get_string_list(LINE *);
+void get_string_list(LINE **);
 void free_string_list(LINE *head);
 void strlower(char*);
 int agg_sub_fuzzy_strcmp(char*, char*);
@@ -39,14 +39,14 @@ int main(int argc, char *argv[]) {
 
     strlower(argv[1]);
 
-    LINE head;
+    LINE *head;
     get_string_list(&head);
-    for(LINE *current = &head; strlen(current->text); current = current->next){
+    for(LINE *current = head; strlen(current->text); current = current->next){
         cmp = agg_sub_fuzzy_strcmp(argv[1], current->text);
         printf("%d\n", cmp);
     }
     
-    free_string_list(&head);
+    free_string_list(head);
 
     return 0;
 }
@@ -86,19 +86,19 @@ void strlower(char * str){
 
 }
 
-void get_string_list(LINE *head){
+void get_string_list(LINE **head){
     *head = (LINE *) malloc(sizeof(LINE));
-    LINE * current = head;
+    LINE * current = *head;
     while(fgets(current->text, MAX_LINE_SIZE, stdin)){
         current->next = malloc(sizeof(LINE));
-        current->next->text = "";
+        current->next->text[0] = '\0';
         strlower(current->text);
         current = current->next;
     }
 }
 
 void free_string_list(LINE *head){
-    for(LINE *current = &head; current->text != NULL;){
+    for(LINE *current = head; current->text != NULL;){
         LINE *last = current;
         current = current->next;
         free(last);
