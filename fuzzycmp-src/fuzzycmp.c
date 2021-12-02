@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 
     LINE head;
     get_string_list(&head);
-    for(LINE *current = &head; current->text != NULL; current = current->next){
+    for(LINE *current = &head; strlen(current->text); current = current->next){
         cmp = agg_sub_fuzzy_strcmp(argv[1], current->text);
         printf("%d\n", cmp);
     }
@@ -91,7 +91,7 @@ void get_string_list(LINE *head){
     LINE * current = head;
     while(fgets(current->text, MAX_LINE_SIZE, stdin)){
         current->next = malloc(sizeof(LINE));
-        current->next->text = NULL;
+        current->next->text = "";
         strlower(current->text);
         current = current->next;
     }
