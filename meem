@@ -1,4 +1,4 @@
-##!/bin/sh
+#!/bin/sh
 IMG_FILE_EXT="*.png *.jpeg *.gif *.tiff *.jpg *.bmp"
 
 case $1 in
