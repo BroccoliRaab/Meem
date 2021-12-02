@@ -41,27 +41,16 @@ int main(int argc, char *argv[]) {
     strlower(argv[1]);
 
     for (token = strtok_r(buffer_string, "\n", &tail);
-         token != NULL && *token != -1;
-         token = strtok_r(NULL, "\n", &tail)) {
+        token != NULL && *token != -1;
+        token = strtok_r(NULL, "\n", &tail)) {
         
-        /*if (strlen(token)<str_arg_len){
-            cmp = agg_sub_fuzzy_strcmp(token, argv[1]);
-        } else {
-            cmp = agg_sub_fuzzy_strcmp(argv[1], token);
-        }*/
         cmp = agg_sub_fuzzy_strcmp(argv[1], token);
         printf("%d\n", cmp);
     }
     free(buffer_string);
     free(buffer);
-/*
-    printf("\n\n");
-    printf("dog and dog with hat : %d\n", fuzzy_strcmp("dog", "dog with hat") );
-    printf("dog and hat on dog's head : %d\n", fuzzy_strcmp("dog", "hat dog\'s head") );
-    printf("dog and doug : %d\n", fuzzy_strcmp("dog", "doug") );
-    printf("dog is cool and doug is cook  : %d\n", fuzzy_strcmp("dog is cool", "doug is cook") );
-*/
-	return 0;
+
+    return 0;
 }
 
 int agg_sub_fuzzy_strcmp(char * str_a, char * str_b){
