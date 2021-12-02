@@ -5,17 +5,23 @@
 #include <limits.h>
 #include <ctype.h>
 
+#define MAX_LINE_SIZE 100
 
 #ifndef min
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 
 //With 2 strings of different length string a should always be the shortest one
+typedef struct line {
+    char text[MAX_LINE_SIZE];
+    LINE* next;
+} LINE;
 
 int dl_strcmp(const char *,  const char *);
 int hamming_strcmp(const char *, const char *, unsigned int);
 int fuzzy_strcmp(const char *, const char *);
-void get_string(char**, size_t *);
+void get_string_list(LINE *);
+void free_string_list(LINE *head);
 void strlower(char*);
 int agg_sub_fuzzy_strcmp(char*, char*);
 
@@ -26,29 +32,21 @@ int main(int argc, char *argv[]) {
     }
     int str_arg_len = strlen(argv[1]);
 
-    size_t buffer_size = sizeof(char)*20;
-    char * buffer = (char *) malloc(buffer_size);
-
-    get_string(&buffer, &buffer_size);
-    
-    char * buffer_string = strdup(buffer);
     char * token;
     char * tail;
 
     int cmp;
 
-    strlower(buffer_string);
     strlower(argv[1]);
 
-    for (token = strtok_r(buffer_string, "\n", &tail);
-        token != NULL && *token != -1;
-        token = strtok_r(NULL, "\n", &tail)) {
-        
-        cmp = agg_sub_fuzzy_strcmp(argv[1], token);
+    LINE head;
+    get_string_list(&head);
+    for(LINE *current = &head; current->text != NULL; current = current->next){
+        cmp = agg_sub_fuzzy_strcmp(argv[1], current->text);
         printf("%d\n", cmp);
     }
-    free(buffer_string);
-    free(buffer);
+    
+    free_string_list(&head);
 
     return 0;
 }
@@ -86,6 +84,25 @@ void strlower(char * str){
         c++;
     } 
 
+}
+
+void get_string_list(LINE *head){
+    *head = (LINE *) malloc(sizeof(LINE));
+    LINE * current = head;
+    while(fgets(current->text, MAX_LINE_SIZE, stdin)){
+        current->next = malloc(sizeof(LINE));
+        current->next->text = NULL;
+        strlower(current->text);
+        current = current->next;
+    }
+}
+
+void free_string_list(LINE *head){
+    for(LINE *current = &head; current->text != NULL;){
+        LINE *last = current;
+        current = current->next;
+        free(last);
+    }
 }
 
 void get_string(char ** buff_ptr, size_t * cap){
